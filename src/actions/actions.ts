@@ -1,5 +1,4 @@
 "use server";
-
 import { revalidatePath } from "next/cache";
 import { prisma } from "../lib/db";
 
@@ -12,7 +11,6 @@ export async function addExpense(formData:FormData){
     });
     revalidatePath("/app/dashboard");
 } 
-
 export async function editExpense(formData:FormData,id:number){
     await prisma.expense.update({
         where:{
