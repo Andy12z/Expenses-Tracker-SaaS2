@@ -1,5 +1,5 @@
 "use client";
-import { deleteExpense } from "../../actions/actions";
+import { deleteExpense } from "../actions/actions";
 
 type ExpensesListProps={
   expenses:{

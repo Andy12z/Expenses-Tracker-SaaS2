@@ -1,4 +1,5 @@
 "use client";
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,7 +17,7 @@ const routes =[
 export default function AppHeader() {
   const pathname = usePathname();
   return (
-    <header className="flex justify-between items-center border-b border-white/10 py-2">
+    <header className="flex  items-center border-b border-white/10 py-2">
         <Link href="/app/dashboard">
           <Image
         src="https://bytegrad.com/course-assets/youtube/expensestracker/logo.png"
@@ -26,7 +27,7 @@ export default function AppHeader() {
          />
         </Link> 
         
-         <nav>
+         <nav className="ml-auto">
             <ul className="flex gap-2 text-xs">
                 {
                 routes.map((route)=>(
@@ -40,9 +41,11 @@ export default function AppHeader() {
                     </li>
                 )) 
 
-                }
+                } 
                 </ul>
          </nav>
+         <LogoutLink className="text-white/70 text-[12px] font-semibold">Logout</LogoutLink>
+
     </header>
   )
 }
