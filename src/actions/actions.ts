@@ -13,7 +13,7 @@ export async function addExpense(formData: FormData) {
     data: {
       description: formData.get("description") as string,
       amount: Number(formData.get("amount")),
-      creatorId: user.id,
+      creatorId: user!.id,
     },
   });
 
@@ -61,8 +61,8 @@ export async function createCheckoutSession() {
 
   const user = await getUser();
   const session = await stripe.checkout.sessions.create({
-    customer_email: user.email!,
-    client_reference_id: user.id,
+    customer_email: user!.email!,
+    client_reference_id: user!.id,
     line_items: [
       {
         price:"price_1S8hbRGfskkWSiZRAzNAxU86",
