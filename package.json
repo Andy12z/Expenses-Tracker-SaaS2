@@ -15,7 +15,8 @@
     "posthog-js": "^1.265.0",
     "posthog-node": "^5.8.4",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "stripe": "^18.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

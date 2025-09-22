@@ -1,20 +1,15 @@
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import UserAuth from "./auth"; 
-import { redirect } from "next/navigation";
+import { checkAuthenticationAndMembership } from "@/lib/server-utils";
 
 export default async function Page() {
-  // Authenticaion check
-  const {isAuthenticated} =getKindeServerSession();
-  if(!(await isAuthenticated())){
-    return redirect("/api/auth/login");
-  }
+  const user = await checkAuthenticationAndMembership();
+
   return (
     <div className="text-center">
-   <h1 className="text-3xl font-bold text-white text-center">Account</h1>
-   <p className="text-white mt-2">
-    Logged in with email: <span className="font-bold"></span>
-   </p>
-    <UserAuth />
+      <h1 className="text-3xl font-bold text-white">Account</h1>
+
+      <p className="text-white mt-2">
+        Logged in with email: <span className="font-bold">{user.email}</span>
+      </p>
     </div>
   );
 }
