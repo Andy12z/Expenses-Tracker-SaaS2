@@ -19,7 +19,7 @@ export default async function Page({
 
   const expenses = await prisma.expense.findMany({
     where: {
-      creatorId: user.id,
+      creatorId: user!.id,
     },
   });
 
