@@ -10,25 +10,34 @@ import Link from "next/link";
 
 export default async function Home() {
   const { isAuthenticated, getUser } = getKindeServerSession();
+
+  // safely handle authentication
   let isLoggedIn = false;
-try {
-  isLoggedIn = (await isAuthenticated()) ?? false;
-} catch (err) {
-  console.error("Kinde auth failed:", err);
-}
+  try {
+    isLoggedIn = (await isAuthenticated()) ?? false;
+  } catch (err) {
+    console.error("Kinde authentication failed:", err);
+    isLoggedIn = false;
+  }
+
+  // default for membership status
   let isPayingMember = false;
 
-  const user = await getUser();
-  if (user) {
-    const membership = await prisma.membership.findFirst({
-      where: {
-        userId: user.id,
-        status: "active",
-      },
-    });
-    if (membership) {
-      isPayingMember = true;
+  // safely fetch user and membership
+  try {
+    const user = await getUser();
+    if (user) {
+      const membership = await prisma.membership.findFirst({
+        where: {
+          userId: user.id,
+          status: "active",
+        },
+      });
+      isPayingMember = Boolean(membership);
     }
+  } catch (err) {
+    console.error("Database query failed:", err);
+    isPayingMember = false;
   }
 
   return (
@@ -57,7 +66,6 @@ try {
               <LoginLink className="bg-black text-white py-2 px-4 rounded-lg font-medium">
                 Login
               </LoginLink>
-
               <RegisterLink className="bg-black/50 text-white py-2 px-4 rounded-lg font-medium">
                 Register
               </RegisterLink>
