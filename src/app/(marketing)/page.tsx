@@ -7,10 +7,17 @@ import {
 } from "@kinde-oss/kinde-auth-nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
+
 export default async function Home() {
   const { isAuthenticated, getUser } = getKindeServerSession();
-  const isLoggedIn = await isAuthenticated();
+  let isLoggedIn = false;
+try {
+  isLoggedIn = (await isAuthenticated()) ?? false;
+} catch (err) {
+  console.error("Kinde auth failed:", err);
+}
   let isPayingMember = false;
+
   const user = await getUser();
   if (user) {
     const membership = await prisma.membership.findFirst({
@@ -23,6 +30,7 @@ export default async function Home() {
       isPayingMember = true;
     }
   }
+
   return (
     <div className="bg-[#5DC9A8] min-h-screen flex flex-col xl:flex-row items-center justify-center gap-10">
       <Image
