@@ -8,36 +8,39 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function Home() {
+// Make the page dynamic if you fetch user/membership info
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
   const { isAuthenticated, getUser } = getKindeServerSession();
 
-  // safely handle authentication
+  // Wrap in try/catch to avoid breaking build if auth fails
   let isLoggedIn = false;
+  let isPayingMember = false;
+  let userId: string | null = null;
+
   try {
     isLoggedIn = (await isAuthenticated()) ?? false;
-  } catch (err) {
-    console.error("Kinde authentication failed:", err);
-    isLoggedIn = false;
-  }
 
-  // default for membership status
-  let isPayingMember = false;
+    if (isLoggedIn) {
+      const user = await getUser();
+      if (user) {
+        userId = user.id;
 
-  // safely fetch user and membership
-  try {
-    const user = await getUser();
-    if (user) {
-      const membership = await prisma.membership.findFirst({
-        where: {
-          userId: user.id,
-          status: "active",
-        },
-      });
-      isPayingMember = Boolean(membership);
+        const membership = await prisma.membership.findFirst({
+          where: {
+            userId: user.id,
+            status: "active",
+          },
+        });
+
+        if (membership) {
+          isPayingMember = true;
+        }
+      }
     }
   } catch (err) {
-    console.error("Database query failed:", err);
-    isPayingMember = false;
+    console.error("Error fetching user data:", err);
   }
 
   return (

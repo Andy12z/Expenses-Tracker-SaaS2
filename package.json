@@ -8,11 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate"
-    
   },
   "dependencies": {
     "@kinde-oss/kinde-auth-nextjs": "^2.9.2",
     "@prisma/client": "^6.16.1",
+    "geist": "^1.5.1",
     "next": "15.5.2",
     "posthog-js": "^1.265.0",
     "posthog-node": "^5.8.4",
